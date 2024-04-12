@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://6gaokxxtteo2"]
+
+[ext_resource type="Script" path="res://Scripts/BulletPatternData.cs" id="1_mjfhu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pyvjs"]
+
+[node name="Main" type="Node" node_paths=PackedStringArray("FOrigin")]
+script = ExtResource("1_mjfhu")
+FOrigin = NodePath("Origin")
+
+[node name="Origin" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Origin"]
+scale = Vector2(5, 5)
+shape = SubResource("RectangleShape2D_pyvjs")
