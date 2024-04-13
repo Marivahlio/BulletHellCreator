@@ -1,0 +1,10 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://bf4ayf2kjt0on"]
+
+[ext_resource type="Script" path="res://Scripts/BulletPatternData.cs" id="1_n6evk"]
+
+[resource]
+script = ExtResource("1_n6evk")
+StartVelocity = Vector2(0, -1)
+LifeTime = 1.0
+BulletInterval = 0.5
+BulletAmount = 5

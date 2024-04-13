@@ -1,15 +1,111 @@
-[gd_scene load_steps=3 format=3 uid="uid://6gaokxxtteo2"]
+[gd_scene load_steps=5 format=3 uid="uid://bi7k52qe87adn"]
 
-[ext_resource type="Script" path="res://Scripts/BulletPatternData.cs" id="1_mjfhu"]
+[ext_resource type="Script" path="res://Scripts/Main.cs" id="1_4xkno"]
+[ext_resource type="Texture2D" uid="uid://c2kl3rbn58r64" path="res://icon.svg" id="2_38uf6"]
+[ext_resource type="PackedScene" uid="uid://cs6xllnjhhb5b" path="res://Scenes/UI-Prefabs/GenericText.tscn" id="3_7dih3"]
+[ext_resource type="PackedScene" uid="uid://d0qq6xgqockrt" path="res://Scenes/UI-Prefabs/FloatInput.tscn" id="4_mnf5n"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_pyvjs"]
+[node name="Main" type="Node"]
+script = ExtResource("1_4xkno")
 
-[node name="Main" type="Node" node_paths=PackedStringArray("FOrigin")]
-script = ExtResource("1_mjfhu")
-FOrigin = NodePath("Origin")
+[node name="Origin" type="Node2D" parent="."]
+position = Vector2(640, 360)
+metadata/_edit_group_ = true
 
-[node name="Origin" type="Area2D" parent="."]
+[node name="Sprite2D" type="Sprite2D" parent="Origin"]
+self_modulate = Color(1, 1, 1, 0.388235)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_38uf6")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Origin"]
-scale = Vector2(5, 5)
-shape = SubResource("RectangleShape2D_pyvjs")
+[node name="UI" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HSplitContainer" type="HSplitContainer" parent="UI/MarginContainer"]
+layout_mode = 2
+theme_override_constants/minimum_grab_thickness = 15
+split_offset = 400
+
+[node name="Editor" type="ColorRect" parent="UI/MarginContainer/HSplitContainer"]
+layout_mode = 2
+color = Color(0.113725, 0.133333, 0.160784, 1)
+
+[node name="HSplitContainer" type="HSplitContainer" parent="UI/MarginContainer/HSplitContainer/Editor"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 1
+theme_override_constants/minimum_grab_thickness = 15
+split_offset = 320
+
+[node name="TextItems" type="ColorRect" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer"]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 2
+color = Color(0.129412, 0.14902, 0.180392, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="GenericText" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer" instance=ExtResource("3_7dih3")]
+layout_mode = 2
+
+[node name="GenericText2" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer" instance=ExtResource("3_7dih3")]
+layout_mode = 2
+
+[node name="InputItems" type="ColorRect" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer"]
+custom_minimum_size = Vector2(175, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+color = Color(0.129412, 0.14902, 0.180392, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 5
+
+[node name="FloatInput" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("4_mnf5n")]
+layout_mode = 2
+
+[node name="Filler" type="ColorRect" parent="UI/MarginContainer/HSplitContainer"]
+custom_minimum_size = Vector2(800, 0)
+layout_mode = 2
+color = Color(1, 1, 1, 0)

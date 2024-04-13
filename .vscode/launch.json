@@ -6,7 +6,7 @@
 					"type": "coreclr",
 					"request": "launch",
 					"preLaunchTask": "build",
-					"program": "D:/Engine/Godot4/Godot.exe",
+					"program": "D:/Engine/Godot4.2/Godot.exe",
 					"console": "internalConsole",
 					"stopAtEntry": false
 			},
