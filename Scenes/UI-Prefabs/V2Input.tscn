@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://caek8odeyim5h"]
+
+[node name="V2Input" type="ColorRect"]
+custom_minimum_size = Vector2(170, 30)
+offset_right = 165.0
+offset_bottom = 30.0
+color = Color(0.211765, 0.239216, 0.290196, 0)
+
+[node name="HFlowContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SpinBox" type="SpinBox" parent="HFlowContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+step = 0.01
+prefix = "x:"
+
+[node name="SpinBox2" type="SpinBox" parent="HFlowContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+step = 0.01
+prefix = "y:"

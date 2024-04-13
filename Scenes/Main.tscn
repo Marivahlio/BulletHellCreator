@@ -1,9 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://bi7k52qe87adn"]
+[gd_scene load_steps=8 format=3 uid="uid://bi7k52qe87adn"]
 
 [ext_resource type="Script" path="res://Scripts/Main.cs" id="1_4xkno"]
 [ext_resource type="Texture2D" uid="uid://c2kl3rbn58r64" path="res://icon.svg" id="2_38uf6"]
 [ext_resource type="PackedScene" uid="uid://cs6xllnjhhb5b" path="res://Scenes/UI-Prefabs/GenericText.tscn" id="3_7dih3"]
 [ext_resource type="PackedScene" uid="uid://d0qq6xgqockrt" path="res://Scenes/UI-Prefabs/FloatInput.tscn" id="4_mnf5n"]
+[ext_resource type="PackedScene" uid="uid://drqj53tlx3slt" path="res://Scenes/UI-Prefabs/IntInput.tscn" id="5_8kwia"]
+[ext_resource type="PackedScene" uid="uid://uhi6e5x6lr6x" path="res://Scenes/UI-Prefabs/BoolInput.tscn" id="5_upaxf"]
+[ext_resource type="PackedScene" uid="uid://caek8odeyim5h" path="res://Scenes/UI-Prefabs/V2Input.tscn" id="6_n1hwp"]
 
 [node name="Main" type="Node"]
 script = ExtResource("1_4xkno")
@@ -56,7 +59,7 @@ split_offset = 320
 [node name="TextItems" type="ColorRect" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer"]
 custom_minimum_size = Vector2(100, 0)
 layout_mode = 2
-color = Color(0.129412, 0.14902, 0.180392, 1)
+color = Color(0.211765, 0.239216, 0.290196, 1)
 
 [node name="MarginContainer" type="MarginContainer" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems"]
 layout_mode = 1
@@ -72,19 +75,43 @@ theme_override_constants/margin_bottom = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer"]
 layout_mode = 2
+mouse_filter = 0
 theme_override_constants/separation = 5
 
 [node name="GenericText" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer" instance=ExtResource("3_7dih3")]
 layout_mode = 2
+color = Color(0.145098, 0.152941, 0.176471, 1)
+
+[node name="Label" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/GenericText/MarginContainer" index="0"]
+text = "Editable Float!
+"
 
 [node name="GenericText2" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer" instance=ExtResource("3_7dih3")]
 layout_mode = 2
+color = Color(0.145098, 0.152941, 0.176471, 1)
+
+[node name="Label" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/GenericText2/MarginContainer" index="0"]
+text = "Editable Int!"
+
+[node name="GenericText3" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer" instance=ExtResource("3_7dih3")]
+layout_mode = 2
+color = Color(0.145098, 0.152941, 0.176471, 1)
+
+[node name="Label" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/GenericText3/MarginContainer" index="0"]
+text = "Awesome Boolean!"
+
+[node name="GenericText4" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer" instance=ExtResource("3_7dih3")]
+layout_mode = 2
+color = Color(0.145098, 0.152941, 0.176471, 1)
+
+[node name="Label" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/GenericText4/MarginContainer" index="0"]
+text = "VECTOR 2!!! Look at this text!"
 
 [node name="InputItems" type="ColorRect" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer"]
-custom_minimum_size = Vector2(175, 0)
+custom_minimum_size = Vector2(180, 0)
 layout_mode = 2
 size_flags_horizontal = 3
-color = Color(0.129412, 0.14902, 0.180392, 1)
+color = Color(0.211765, 0.239216, 0.290196, 1)
 
 [node name="MarginContainer" type="MarginContainer" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems"]
 layout_mode = 1
@@ -100,12 +127,28 @@ theme_override_constants/margin_bottom = 5
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer"]
 layout_mode = 2
+mouse_filter = 0
 theme_override_constants/separation = 5
 
-[node name="FloatInput" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("4_mnf5n")]
+[node name="FloatInput2" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("4_mnf5n")]
+layout_mode = 2
+
+[node name="IntInput" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("5_8kwia")]
+layout_mode = 2
+
+[node name="FloatInput" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("5_upaxf")]
+layout_mode = 2
+
+[node name="V2Input2" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("6_n1hwp")]
 layout_mode = 2
 
 [node name="Filler" type="ColorRect" parent="UI/MarginContainer/HSplitContainer"]
 custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 color = Color(1, 1, 1, 0)
+
+[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/GenericText"]
+[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/GenericText2"]
+[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/GenericText3"]
+[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/GenericText4"]
+[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer/FloatInput2"]
