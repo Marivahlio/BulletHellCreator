@@ -2,7 +2,7 @@
 
 [node name="GenericText" type="ColorRect"]
 custom_minimum_size = Vector2(80, 30)
-color = Color(0.211765, 0.239216, 0.290196, 1)
+color = Color(0.145098, 0.152941, 0.176471, 1)
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1
