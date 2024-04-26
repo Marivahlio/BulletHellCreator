@@ -19,9 +19,13 @@ layout_mode = 2
 size_flags_horizontal = 3
 step = 0.01
 prefix = "x:"
+suffix = "f"
+select_all_on_focus = true
 
 [node name="YValue" type="SpinBox" parent="HFlowContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 step = 0.01
 prefix = "y:"
+suffix = "f"
+select_all_on_focus = true

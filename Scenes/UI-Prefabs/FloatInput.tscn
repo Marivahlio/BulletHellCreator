@@ -16,3 +16,4 @@ grow_vertical = 2
 step = 0.01
 update_on_text_changed = true
 suffix = "f"
+select_all_on_focus = true
