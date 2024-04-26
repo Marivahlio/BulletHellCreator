@@ -1,15 +1,19 @@
-[gd_scene load_steps=8 format=3 uid="uid://bi7k52qe87adn"]
+[gd_scene load_steps=10 format=3 uid="uid://bi7k52qe87adn"]
 
 [ext_resource type="Script" path="res://Scripts/Main.cs" id="1_4xkno"]
 [ext_resource type="Texture2D" uid="uid://c2kl3rbn58r64" path="res://icon.svg" id="2_38uf6"]
+[ext_resource type="PackedScene" uid="uid://bldsa4c83e45u" path="res://Scenes/BulletPattern.tscn" id="3_3vquh"]
 [ext_resource type="PackedScene" uid="uid://cs6xllnjhhb5b" path="res://Scenes/UI-Prefabs/GenericText.tscn" id="3_7dih3"]
+[ext_resource type="Script" path="res://Scripts/BulletPattern.cs" id="4_e14t1"]
 [ext_resource type="PackedScene" uid="uid://d0qq6xgqockrt" path="res://Scenes/UI-Prefabs/FloatInput.tscn" id="4_mnf5n"]
 [ext_resource type="PackedScene" uid="uid://drqj53tlx3slt" path="res://Scenes/UI-Prefabs/IntInput.tscn" id="5_8kwia"]
-[ext_resource type="PackedScene" uid="uid://uhi6e5x6lr6x" path="res://Scenes/UI-Prefabs/BoolInput.tscn" id="5_upaxf"]
+[ext_resource type="PackedScene" uid="uid://cirog754fkfdn" path="res://Scenes/UI-Prefabs/BoolInput.tscn" id="5_upaxf"]
 [ext_resource type="PackedScene" uid="uid://caek8odeyim5h" path="res://Scenes/UI-Prefabs/V2Input.tscn" id="6_n1hwp"]
 
-[node name="Main" type="Node"]
+[node name="Main" type="Node" node_paths=PackedStringArray("Origin", "BulletPattern")]
 script = ExtResource("1_4xkno")
+Origin = NodePath("Origin")
+BulletPattern = NodePath("Origin/BulletPattern")
 
 [node name="Origin" type="Node2D" parent="."]
 position = Vector2(640, 360)
@@ -19,6 +23,16 @@ metadata/_edit_group_ = true
 self_modulate = Color(1, 1, 1, 0.388235)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_38uf6")
+
+[node name="BulletPattern" parent="Origin" node_paths=PackedStringArray("StartVelocityX", "StartVelocityY", "LifeTime", "BulletAmount", "BulletInterval", "Looping", "LoopDelay") instance=ExtResource("3_3vquh")]
+script = ExtResource("4_e14t1")
+StartVelocityX = NodePath("../../UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer/InStartVelocity/HFlowContainer/XValue")
+StartVelocityY = NodePath("../../UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer/InStartVelocity/HFlowContainer/YValue")
+LifeTime = NodePath("../../UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer/InLifeTime/Value")
+BulletAmount = NodePath("../../UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer/InBulletAmount/Value")
+BulletInterval = NodePath("../../UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer/InBulletInterval/Value")
+Looping = NodePath("../../UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer/InLooping/Value")
+LoopDelay = NodePath("../../UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer/InLoopDelay/Value")
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3
@@ -78,34 +92,41 @@ layout_mode = 2
 mouse_filter = 0
 theme_override_constants/separation = 5
 
-[node name="GenericText" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer" instance=ExtResource("3_7dih3")]
+[node name="StartVelocity" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer" instance=ExtResource("3_7dih3")]
 layout_mode = 2
-color = Color(0.145098, 0.152941, 0.176471, 1)
 
-[node name="Label" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/GenericText/MarginContainer" index="0"]
-text = "Editable Float!
-"
+[node name="Label" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/StartVelocity/MarginContainer" index="0"]
+text = "Start Velocity"
 
-[node name="GenericText2" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer" instance=ExtResource("3_7dih3")]
+[node name="LifeTime" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer" instance=ExtResource("3_7dih3")]
 layout_mode = 2
-color = Color(0.145098, 0.152941, 0.176471, 1)
 
-[node name="Label" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/GenericText2/MarginContainer" index="0"]
-text = "Editable Int!"
+[node name="Label" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/LifeTime/MarginContainer" index="0"]
+text = "Lifetime"
 
-[node name="GenericText3" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer" instance=ExtResource("3_7dih3")]
+[node name="BulletAmount" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer" instance=ExtResource("3_7dih3")]
 layout_mode = 2
-color = Color(0.145098, 0.152941, 0.176471, 1)
 
-[node name="Label" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/GenericText3/MarginContainer" index="0"]
-text = "Awesome Boolean!"
+[node name="Label" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/BulletAmount/MarginContainer" index="0"]
+text = "Bullet Amount"
 
-[node name="GenericText4" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer" instance=ExtResource("3_7dih3")]
+[node name="Bullet Interval" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer" instance=ExtResource("3_7dih3")]
 layout_mode = 2
-color = Color(0.145098, 0.152941, 0.176471, 1)
 
-[node name="Label" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/GenericText4/MarginContainer" index="0"]
-text = "VECTOR 2!!! Look at this text!"
+[node name="Label" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/Bullet Interval/MarginContainer" index="0"]
+text = "Bullet Interval"
+
+[node name="Looping" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer" instance=ExtResource("3_7dih3")]
+layout_mode = 2
+
+[node name="Label" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/Looping/MarginContainer" index="0"]
+text = "Looping"
+
+[node name="LoopDelay" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer" instance=ExtResource("3_7dih3")]
+layout_mode = 2
+
+[node name="Label" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/LoopDelay/MarginContainer" index="0"]
+text = "Loop Delay"
 
 [node name="InputItems" type="ColorRect" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer"]
 custom_minimum_size = Vector2(180, 0)
@@ -130,16 +151,22 @@ layout_mode = 2
 mouse_filter = 0
 theme_override_constants/separation = 5
 
-[node name="FloatInput2" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("4_mnf5n")]
+[node name="InStartVelocity" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("6_n1hwp")]
 layout_mode = 2
 
-[node name="IntInput" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("5_8kwia")]
+[node name="InLifeTime" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("4_mnf5n")]
 layout_mode = 2
 
-[node name="FloatInput" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("5_upaxf")]
+[node name="InBulletAmount" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("5_8kwia")]
 layout_mode = 2
 
-[node name="V2Input2" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("6_n1hwp")]
+[node name="InBulletInterval" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("4_mnf5n")]
+layout_mode = 2
+
+[node name="InLooping" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("5_upaxf")]
+layout_mode = 2
+
+[node name="InLoopDelay" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("4_mnf5n")]
 layout_mode = 2
 
 [node name="Filler" type="ColorRect" parent="UI/MarginContainer/HSplitContainer"]
@@ -147,8 +174,15 @@ custom_minimum_size = Vector2(800, 0)
 layout_mode = 2
 color = Color(1, 1, 1, 0)
 
-[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/GenericText"]
-[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/GenericText2"]
-[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/GenericText3"]
-[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/GenericText4"]
-[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer/FloatInput2"]
+[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/StartVelocity"]
+[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/LifeTime"]
+[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/BulletAmount"]
+[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/Bullet Interval"]
+[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/Looping"]
+[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/TextItems/MarginContainer/VBoxContainer/LoopDelay"]
+[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer/InStartVelocity"]
+[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer/InLifeTime"]
+[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer/InBulletAmount"]
+[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer/InBulletInterval"]
+[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer/InLooping"]
+[editable path="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer/InLoopDelay"]

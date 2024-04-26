@@ -21,4 +21,12 @@ public partial class BulletPatternData : Resource
 
 	public int GetBulletAmount() { return BulletAmount; }
 	public void SetBulletAmount(int pVal) { BulletAmount = pVal; }
+
+	public bool GetLooping() { return Looping; }
+	public void SetLooping(bool pVal) { Looping = pVal; }
+
+	public float GetLoopDelay() { return LoopDelay; }
+	public void SetLoopDelay(float pVal) { LoopDelay = pVal; }
+
+	public BulletPatternData() {}
 }

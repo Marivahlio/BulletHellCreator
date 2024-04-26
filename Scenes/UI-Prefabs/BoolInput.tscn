@@ -1,12 +1,12 @@
-[gd_scene format=3 uid="uid://uhi6e5x6lr6x"]
+[gd_scene format=3 uid="uid://cirog754fkfdn"]
 
-[node name="FloatInput" type="ColorRect"]
+[node name="BoolInput" type="ColorRect"]
 custom_minimum_size = Vector2(170, 30)
 offset_right = 165.0
 offset_bottom = 30.0
 color = Color(0.211765, 0.239216, 0.290196, 0)
 
-[node name="CheckBox" type="CheckButton" parent="."]
+[node name="Value" type="CheckButton" parent="."]
 layout_mode = 0
 offset_right = 24.0
 offset_bottom = 24.0
