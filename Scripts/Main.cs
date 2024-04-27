@@ -1,3 +1,4 @@
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.CompilerServices;
 using Godot;
 
@@ -23,6 +24,14 @@ public partial class Main : Node
 		UpdatePatternData();
 	}
 
+	public override void _Process(double delta)
+	{
+		if (Input.IsKeyPressed(Key.R))
+		{
+			UpdatePatternData();
+		}
+	}
+
 	public void UpdatePatternData()
 	{
 		BulletPattern.GetPatternData().SetStartVelocity(new Vector2((float)StartVelocityX.Value,(float)StartVelocityY.Value));
@@ -31,11 +40,12 @@ public partial class Main : Node
 		BulletPattern.GetPatternData().SetBulletInterval((float)BulletInterval.Value);
 		BulletPattern.GetPatternData().SetLooping(Looping.ButtonPressed);
 		BulletPattern.GetPatternData().SetLoopDelay((float)LoopDelay.Value);
+
+		BulletPattern.Restart();
 	}
 
 	private void ConnectSignals()
 	{
-
 		StartVelocityX.ValueChanged += UpdatePatternDataRedirect;
 		StartVelocityY.ValueChanged += UpdatePatternDataRedirect;
 		LifeTime.ValueChanged += UpdatePatternDataRedirect;
@@ -44,8 +54,6 @@ public partial class Main : Node
 		Looping.Toggled += UpdatePatternDataRedirect;
 		LoopDelay.ValueChanged += UpdatePatternDataRedirect;
 	}
-
-
 
 	// the event subscription used in ConnectSignals expect vars to be given and won't work otherwhise, but we don't care about those
 	private void UpdatePatternDataRedirect(double pFakeInput){UpdatePatternData();}

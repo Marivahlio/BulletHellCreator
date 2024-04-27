@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://bi7k52qe87adn"]
+[gd_scene load_steps=12 format=3 uid="uid://bi7k52qe87adn"]
 
 [ext_resource type="Script" path="res://Scripts/Main.cs" id="1_4xkno"]
 [ext_resource type="Texture2D" uid="uid://c2kl3rbn58r64" path="res://icon.svg" id="2_38uf6"]
@@ -9,6 +9,8 @@
 [ext_resource type="PackedScene" uid="uid://drqj53tlx3slt" path="res://Scenes/UI-Prefabs/IntInput.tscn" id="5_8kwia"]
 [ext_resource type="PackedScene" uid="uid://cirog754fkfdn" path="res://Scenes/UI-Prefabs/BoolInput.tscn" id="5_upaxf"]
 [ext_resource type="PackedScene" uid="uid://caek8odeyim5h" path="res://Scenes/UI-Prefabs/V2Input.tscn" id="6_n1hwp"]
+[ext_resource type="Script" path="res://Scripts/BulletPool.cs" id="10_dnjb3"]
+[ext_resource type="PackedScene" uid="uid://b5ncdeyu101a4" path="res://Scenes/Bullet.tscn" id="11_nflrb"]
 
 [node name="Main" type="Node" node_paths=PackedStringArray("Origin", "BulletPattern", "MainSplitContainer", "StartVelocityX", "StartVelocityY", "LifeTime", "BulletAmount", "BulletInterval", "Looping", "LoopDelay")]
 script = ExtResource("1_4xkno")
@@ -23,6 +25,10 @@ BulletInterval = NodePath("UI/MarginContainer/HSplitContainer/Editor/HSplitConta
 Looping = NodePath("UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer/InLooping/Value")
 LoopDelay = NodePath("UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer/InLoopDelay/Value")
 
+[node name="BulletPool" type="Node" parent="."]
+script = ExtResource("10_dnjb3")
+BulletScene = ExtResource("11_nflrb")
+
 [node name="Origin" type="Node2D" parent="."]
 position = Vector2(640, 360)
 metadata/_edit_group_ = true
@@ -32,8 +38,10 @@ self_modulate = Color(1, 1, 1, 0.388235)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("2_38uf6")
 
-[node name="BulletPattern" parent="Origin" instance=ExtResource("3_3vquh")]
+[node name="BulletPattern" parent="Origin" node_paths=PackedStringArray("Pool") instance=ExtResource("3_3vquh")]
 script = ExtResource("4_e14t1")
+Pool = NodePath("../../BulletPool")
+Texture = ExtResource("2_38uf6")
 
 [node name="UI" type="Control" parent="."]
 layout_mode = 3
@@ -169,14 +177,23 @@ theme_override_constants/separation = 5
 [node name="InStartVelocity" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("6_n1hwp")]
 layout_mode = 2
 
+[node name="XValue" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer/InStartVelocity/HFlowContainer" index="0"]
+value = 20.0
+
 [node name="InLifeTime" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("4_mnf5n")]
 layout_mode = 2
+
+[node name="Value" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer/InLifeTime" index="0"]
+value = 1.0
 
 [node name="InBulletAmount" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("5_8kwia")]
 layout_mode = 2
 
 [node name="InBulletInterval" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("4_mnf5n")]
 layout_mode = 2
+
+[node name="Value" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer/InBulletInterval" index="0"]
+value = 0.2
 
 [node name="InLooping" parent="UI/MarginContainer/HSplitContainer/Editor/HSplitContainer/InputItems/MarginContainer/VBoxContainer" instance=ExtResource("5_upaxf")]
 layout_mode = 2
