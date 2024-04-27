@@ -28,7 +28,7 @@ public partial class Bullet : Sprite2D
 
 		if (Lifetime <= 0)
 		{
-			Deactivate();
+			EmitSignal(nameof(BulletDeactivated), this);
 			GD.Print("Re-add to pool");
 		}
 	}
@@ -52,6 +52,5 @@ public partial class Bullet : Sprite2D
 	{
 		Activated = false;
 		Scale = Vector2.Zero;
-		EmitSignal(nameof(BulletDeactivated), this);
 	}
 }

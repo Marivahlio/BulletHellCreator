@@ -21,7 +21,7 @@ public partial class BulletPool : Node
 			bulletObj.Deactivate();
 			AvailableBullets.Add(bulletObj);
 
-			//bulletObj.Connect("BulletDeactivated", new Callable(this, nameof(DeactivateBullet)));
+			bulletObj.Connect("BulletDeactivated", new Callable(this, nameof(DeactivateBullet)));
 
 			AddChild(bulletObj);
 		}
