@@ -1,4 +1,5 @@
 using Godot;
+using System;
 using System.Collections.Generic;
 
 public partial class BulletPattern : Node
@@ -8,8 +9,8 @@ public partial class BulletPattern : Node
 
 	private BulletPatternData PatternData = new(); 
 
-	private float BulletInterval;
-	private int BulletsToSpawn;
+	private int BurstAmount;
+	private float BurstInterval;
 	private float LoopDelay;
 
 	public BulletPatternData GetPatternData() {return PatternData;}
@@ -21,8 +22,8 @@ public partial class BulletPattern : Node
 
 	public void RefreshData()
 	{
-		BulletInterval = PatternData.GetBulletInterval();
-		BulletsToSpawn = PatternData.GetBulletAmount();
+		BurstAmount = PatternData.GetBurstAmount();
+		BurstInterval = PatternData.GetBurstInterval();
 		LoopDelay = PatternData.GetLoopDelay();
 	}
 
@@ -36,7 +37,7 @@ public partial class BulletPattern : Node
 	{
 		float DeltaTime = (float)delta;
 
-		if (BulletsToSpawn <= 0)
+		if (BurstAmount <= 0)
 		{
 			if (PatternData.GetLooping() == false)
 			{
@@ -49,14 +50,16 @@ public partial class BulletPattern : Node
 			{
 				RefreshData();
 			}
+
+			return;
 		}
 
-		BulletInterval -= DeltaTime;
+		BurstInterval -= DeltaTime;
 
-		if (BulletInterval <= 0)
+		if (BurstInterval <= 0)
 		{
-			SpawnBullets(Pool.GetAvailableBullets(1));
-			BulletInterval = PatternData.GetBulletInterval();
+			SpawnBullets(Pool.GetAvailableBullets(PatternData.GetBulletsPerBurst()));
+			BurstInterval = PatternData.GetBurstInterval();
 		}
 	}
 
@@ -64,10 +67,11 @@ public partial class BulletPattern : Node
 	{
 		for (int i = 0; i < pBullets.Count; i++)
 		{
-			BulletsToSpawn--;
-
-			pBullets[i].Setup(GetParent<Node2D>().Position, null, Texture, PatternData.GetStartVelocity(), PatternData.GetLifeTime());
+			Vector2 RotatedStartVelocity = PatternData.GetStartVelocity().Rotated(i*45); // TODO: remove this once spawn shapes are in
+			pBullets[i].Setup(GetParent<Node2D>().Position, null, Texture, RotatedStartVelocity, PatternData.GetLifeTime());
 			pBullets[i].Activate();
 		}
+
+		BurstAmount--;
 	}
 }

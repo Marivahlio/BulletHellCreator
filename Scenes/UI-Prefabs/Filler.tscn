@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://7t3b28wc7iho"]
+
+[node name="Filler" type="ColorRect"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(80, 30)
+color = Color(0.145098, 0.152941, 0.176471, 1)

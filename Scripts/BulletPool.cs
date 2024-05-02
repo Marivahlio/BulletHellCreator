@@ -5,26 +5,16 @@ using System.Collections.Generic;
 public partial class BulletPool : Node
 {
 	[Export] PackedScene BulletScene;
-	[Export] public int MaxBullets = 50;
+	[Export] public int MaxBullets = 1000;
 
 	private List<Bullet> AvailableBullets = new();
 	private List<Bullet> ActivatedBullets = new();
 
 	public int GetPoolSize() {return MaxBullets;}
 
-	// Called when the node enters the scene tree for the first time.
 	public override void _Ready()
 	{
-		for (int i = 0; i < MaxBullets; i++)
-		{
-			Bullet bulletObj = (Bullet)BulletScene.Instantiate();
-			bulletObj.Deactivate();
-			AvailableBullets.Add(bulletObj);
-
-			bulletObj.Connect("BulletDeactivated", new Callable(this, nameof(DeactivateBullet)));
-
-			AddChild(bulletObj);
-		}
+		CreateBulletsForPool(MaxBullets);
 	}
 
 	public List<Bullet> GetAvailableBullets(int pAmount)
@@ -66,7 +56,19 @@ public partial class BulletPool : Node
 		pBullet.Deactivate();
 		AvailableBullets.Add(pBullet);
 		ActivatedBullets.Remove(pBullet);
+	}
 
-		GD.Print("Bullet deactivated. AvailableBullets: " + AvailableBullets.Count + " - ActivatedBullets: " + ActivatedBullets.Count);
+	private void CreateBulletsForPool(int pAmount)
+	{
+		for (int i = 0; i < pAmount; i++)
+		{
+			Bullet bulletObj = (Bullet)BulletScene.Instantiate();
+			bulletObj.Deactivate();
+			AvailableBullets.Add(bulletObj);
+
+			bulletObj.Connect("BulletDeactivated", new Callable(this, nameof(DeactivateBullet)));
+
+			AddChild(bulletObj);
+		}
 	}
 }
