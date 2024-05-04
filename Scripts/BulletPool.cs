@@ -5,7 +5,7 @@ using System.Collections.Generic;
 public partial class BulletPool : Node
 {
 	[Export] PackedScene BulletScene;
-	[Export] public int MaxBullets = 1000;
+	[Export] public int MaxBullets = 300;
 
 	private List<Bullet> AvailableBullets = new();
 	private List<Bullet> ActivatedBullets = new();

@@ -44,12 +44,12 @@ public partial class Bullet : Sprite2D
 	public void Activate()
 	{
 		Activated = true;
-		Scale = Vector2.One;
+		Visible = true;
 	}
 
 	public void Deactivate()
 	{
 		Activated = false;
-		Scale = Vector2.Zero;
+		Visible = false;
 	}
 }
