@@ -34,7 +34,7 @@ public partial class BulletPatternData
 
 	// Bullet Settings
 	public Vector2 GetStartVelocity() { return StartVelocity; }
-	public void SetStartVelocity(Vector2 pVal) { StartVelocity = pVal; }
+	public void SetStartVelocity(float pX, float pY) { StartVelocity.X = pX; StartVelocity.Y = pY; }
 
 	public float GetLifeTime() { return LifeTime; }
 	public void SetLifeTime(float pVal) { LifeTime = pVal; }

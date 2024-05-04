@@ -1,10 +1,15 @@
-[gd_scene format=3 uid="uid://caek8odeyim5h"]
+[gd_scene load_steps=2 format=3 uid="uid://caek8odeyim5h"]
 
-[node name="V2Input" type="ColorRect"]
+[ext_resource type="Script" path="res://Scripts/UIPrefabs/Vector2Input.cs" id="1_ch6vk"]
+
+[node name="V2Input" type="ColorRect" node_paths=PackedStringArray("XValueSpinbox", "YValueSpinbox")]
 custom_minimum_size = Vector2(170, 30)
 offset_right = 165.0
 offset_bottom = 30.0
 color = Color(0.211765, 0.239216, 0.290196, 0)
+script = ExtResource("1_ch6vk")
+XValueSpinbox = NodePath("HFlowContainer/XValue")
+YValueSpinbox = NodePath("HFlowContainer/YValue")
 
 [node name="HFlowContainer" type="HBoxContainer" parent="."]
 layout_mode = 1

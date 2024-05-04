@@ -1,10 +1,14 @@
-[gd_scene format=3 uid="uid://drqj53tlx3slt"]
+[gd_scene load_steps=2 format=3 uid="uid://drqj53tlx3slt"]
 
-[node name="IntInput" type="ColorRect"]
+[ext_resource type="Script" path="res://Scripts/UIPrefabs/IntInput.cs" id="1_ne2kq"]
+
+[node name="IntInput" type="ColorRect" node_paths=PackedStringArray("ValueSpinbox")]
 custom_minimum_size = Vector2(170, 30)
 offset_right = 165.0
 offset_bottom = 30.0
 color = Color(0.211765, 0.239216, 0.290196, 0)
+script = ExtResource("1_ne2kq")
+ValueSpinbox = NodePath("Value")
 
 [node name="Value" type="SpinBox" parent="."]
 layout_mode = 1

@@ -1,9 +1,13 @@
-[gd_scene format=3 uid="uid://cs6xllnjhhb5b"]
+[gd_scene load_steps=2 format=3 uid="uid://cs6xllnjhhb5b"]
 
-[node name="GenericText" type="ColorRect"]
+[ext_resource type="Script" path="res://Scripts/UIPrefabs/GenericText.cs" id="1_l82in"]
+
+[node name="GenericText" type="ColorRect" node_paths=PackedStringArray("TextLabel")]
 custom_minimum_size = Vector2(80, 30)
 size_flags_horizontal = 3
 color = Color(0.145098, 0.152941, 0.176471, 1)
+script = ExtResource("1_l82in")
+TextLabel = NodePath("MarginContainer/Label")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 layout_mode = 1

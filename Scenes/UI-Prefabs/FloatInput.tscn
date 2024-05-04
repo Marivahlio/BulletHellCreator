@@ -1,10 +1,14 @@
-[gd_scene format=3 uid="uid://d0qq6xgqockrt"]
+[gd_scene load_steps=2 format=3 uid="uid://d0qq6xgqockrt"]
 
-[node name="FloatInput" type="ColorRect"]
+[ext_resource type="Script" path="res://Scripts/UIPrefabs/FloatInput.cs" id="1_ygxev"]
+
+[node name="FloatInput" type="ColorRect" node_paths=PackedStringArray("ValueSpinbox")]
 custom_minimum_size = Vector2(170, 30)
 offset_right = 165.0
 offset_bottom = 30.0
 color = Color(0.211765, 0.239216, 0.290196, 0)
+script = ExtResource("1_ygxev")
+ValueSpinbox = NodePath("Value")
 
 [node name="Value" type="SpinBox" parent="."]
 layout_mode = 1
