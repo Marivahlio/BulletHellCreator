@@ -36,6 +36,16 @@ public partial class Main : Node
 		}
 	}
 
+	public void UpdatePatternData()
+	{
+		foreach (BaseInput inputObj in InputItems)
+		{
+			inputObj.UpdateValue();
+		}
+
+		BulletPattern.Restart();
+	}
+
 	private void InstantiateData()
 	{
 		// Pattern Settings Tab
@@ -50,19 +60,10 @@ public partial class Main : Node
 		MainTabContainer.CurrentTab = 1;
 		CreateVector2Input(	"Start Velocity", 		BulletPattern.GetPatternData().SetStartVelocity, 700, 0, -10000, -10000, 10000, 10000, 0.01f, 0.01f);
 		CreateFloatInput(		"Lifetime", 					BulletPattern.GetPatternData().SetLifeTime, 0.5f, 0.01f, 20f, 0.01f);
+		CreateVector2Input(	"Scale", 							BulletPattern.GetPatternData().SetScale, 1, 1, 0.05f, 0.05f, 10, 10, 0.01f, 0.01f);
 
 		// Show first tab by default
 		MainTabContainer.CurrentTab = 0;
-	}
-
-	public void UpdatePatternData()
-	{
-		foreach (BaseInput inputObj in InputItems)
-		{
-			inputObj.UpdateValue();
-		}
-
-		BulletPattern.Restart();
 	}
 
 	// the event subscription used in ConnectSignals expect vars to be given and won't work otherwhise, but we don't care about those
@@ -102,7 +103,7 @@ public partial class Main : Node
 		CreateGenericTextObject(pDisplayName);
 	}
 
-	private void CreateVector2Input (string pDisplayName, Action<float, float> pLinkedSetter, int pDefaultValueX, int pDefaultValueY, int pMinValueX, int pMinValueY, int pMaxValueX, int pMaxValueY, float pStepSizeX, float pStepSizeY)
+	private void CreateVector2Input (string pDisplayName, Action<float, float> pLinkedSetter, float pDefaultValueX, float pDefaultValueY, float pMinValueX, float pMinValueY, float pMaxValueX, float pMaxValueY, float pStepSizeX, float pStepSizeY)
 	{
 		Vector2Input InputObj = (Vector2Input)Vector2InputScene.Instantiate();
 		InputObj.SetData(pLinkedSetter, pDefaultValueX, pDefaultValueY, pMinValueX, pMinValueY, pMaxValueX, pMaxValueY, pStepSizeX, pStepSizeY);

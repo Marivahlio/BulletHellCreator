@@ -13,6 +13,7 @@ public partial class BulletPatternData
 	// Bullet Settings
 	private Vector2 StartVelocity = new(700, 0);
 	private float LifeTime = 0.5f;
+	private Vector2 Scale = Vector2.One;
 
 
 
@@ -38,6 +39,9 @@ public partial class BulletPatternData
 
 	public float GetLifeTime() { return LifeTime; }
 	public void SetLifeTime(float pVal) { LifeTime = pVal; }
+
+	public Vector2 GetScale() { return Scale; }
+	public void SetScale(float pX, float pY) { Scale.X = pX; Scale.Y = pY; }
 
 	public BulletPatternData() {}
 }

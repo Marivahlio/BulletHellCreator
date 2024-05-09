@@ -9,8 +9,8 @@ public partial class Bullet : Sprite2D
 	private BulletPattern ParentPattern;
 	private bool Activated;
 
-	private Vector2 Velocity;
-	private float Lifetime;
+	private Vector2 GivenVelocity;
+	private float GivenLifetime;
 
 	public bool IsActivated() {return Activated;}
 
@@ -23,22 +23,23 @@ public partial class Bullet : Sprite2D
 
 		float DeltaTime = (float)delta;
 
-		Position += Velocity * DeltaTime;
-		Lifetime -= DeltaTime;
+		Position += GivenVelocity * DeltaTime;
+		GivenLifetime -= DeltaTime;
 
-		if (Lifetime <= 0)
+		if (GivenLifetime <= 0)
 		{
 			EmitSignal(nameof(BulletDeactivated), this);
 		}
 	}
 
-	public void Setup(Vector2 pStartPosition, BulletPattern pParentPattern, Texture2D pTexture, Vector2 pVelocity, float pLifetime)
+	public void Setup(Vector2 pStartPosition, BulletPattern pParentPattern, Texture2D pTexture, Vector2 pVelocity, float pLifetime, Vector2 pScale)
 	{
 		Position = pStartPosition;
 		ParentPattern = pParentPattern;
 		Texture = pTexture;
-		Velocity = pVelocity;
-		Lifetime = pLifetime;
+		GivenVelocity = pVelocity;
+		GivenLifetime = pLifetime;
+		Scale = pScale / 10;
 	}
 
 	public void Activate()

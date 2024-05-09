@@ -68,7 +68,10 @@ public partial class BulletPattern : Node
 		for (int i = 0; i < pBullets.Count; i++)
 		{
 			Vector2 RotatedStartVelocity = PatternData.GetStartVelocity().Rotated(i*45); // TODO: remove this once spawn shapes are in
-			pBullets[i].Setup(GetParent<Node2D>().Position, null, Texture, RotatedStartVelocity, PatternData.GetLifeTime());
+
+			// TODO: once more values are in like emitter shapes and nested bulletpatterns, just pass the pattern as first param, and then the params that
+			// are not in the pattern like position.
+			pBullets[i].Setup(GetParent<Node2D>().Position, null, Texture, RotatedStartVelocity, PatternData.GetLifeTime(), PatternData.GetScale());
 			pBullets[i].Activate();
 		}
 
