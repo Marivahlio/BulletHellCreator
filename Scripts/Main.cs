@@ -8,10 +8,10 @@ public partial class Main : Node
 	[ExportGroup("General References")] 
 	[Export] public Node2D Origin;
 	[Export] private BulletPattern BulletPattern;
-	[Export] private SplitContainer MainSplitContainer;
 	[Export] private VBoxContainer[] TextContainers; 	// Index = tab order
 	[Export] private VBoxContainer[] InputContainers; // Index = tab order
 	[Export] private TabContainer MainTabContainer;
+	[Export] private Control Filler;
 
 	[ExportGroup("UI Prefabs")] 
 	[Export] private PackedScene GenericTextScene;
@@ -34,7 +34,10 @@ public partial class Main : Node
 		if (Input.IsKeyPressed(Key.R))
 		{
 			UpdatePatternData();
+			BulletPattern.Restart();
 		}
+		
+		MoveOrigin();
 	}
 
 	public void UpdatePatternData()
@@ -51,25 +54,33 @@ public partial class Main : Node
 		MainTabContainer.CurrentTab = 0;
 		CreateIntInput(			"Bullets Per Burst", 	BulletPattern.GetPatternData().SetBulletsPerBurst, 1, 1, 50, 1);
 		CreateIntInput(			"Burst Amount", 			BulletPattern.GetPatternData().SetBurstAmount, 3, 1, 50, 1);
-		CreateFloatInput(		"Burst Interval", 		BulletPattern.GetPatternData().SetBurstInterval, 0.2f, 0.01f, 10f, 0.01f);
+		CreateFloatInput(		"Burst Interval", 		BulletPattern.GetPatternData().SetBurstInterval, 0.1f, 0.01f, 10f, 0.01f);
 		CreateBoolInput(		"Looping", 						BulletPattern.GetPatternData().SetLooping, true);
-		CreateFloatInput(		"Loop Delay", 				BulletPattern.GetPatternData().SetLoopDelay, 1f, 0, 10, 0.01f);
+		CreateFloatInput(		"Loop Delay", 				BulletPattern.GetPatternData().SetLoopDelay, 0, 0, 10, 0.01f);
 
 		// Bullet Settings Tab
 		MainTabContainer.CurrentTab = 1;
 		CreateVector2Input(	"Start Velocity", 		BulletPattern.GetPatternData().SetStartVelocity, 700, 0, -10000, -10000, 10000, 10000, 0.01f, 0.01f);
-		CreateFloatInput(		"Lifetime", 					BulletPattern.GetPatternData().SetLifeTime, 0.5f, 0.01f, 20f, 0.01f);
-		CreateVector2Input(	"Scale", 							BulletPattern.GetPatternData().SetScale, 1, 1, 0.05f, 0.05f, 10, 10, 0.01f, 0.01f);
+		CreateFloatInput(		"Lifetime", 					BulletPattern.GetPatternData().SetLifeTime, 1.0f, 0.01f, 20f, 0.01f);
+		CreateVector2Input(	"Scale", 							BulletPattern.GetPatternData().SetScale, 2, 2, 0.05f, 0.05f, 10, 10, 0.01f, 0.01f);
 		CreateColorInput(		"Color", 							BulletPattern.GetPatternData().SetColor, new Color(1, 1, 1, 1));
+		CreateFloatInput(		"Torque", 						BulletPattern.GetPatternData().SetTorque, 0, -360f, 360f, 0.01f);
 
 		// Show first tab by default
 		MainTabContainer.CurrentTab = 0;
+
+		UpdatePatternData();
+	}
+
+	private void MoveOrigin(long offset = 0)
+	{
+		Origin.GlobalPosition = Filler.GetScreenPosition() + Filler.GetGlobalRect().Size/2;
 	}
 
 	// the event subscription used in ConnectSignals expect vars to be given and won't work otherwhise, but we don't care about those
 	private void UpdatePatternDataRedirect(double pFakeInput){UpdatePatternData();}
 	private void UpdatePatternDataRedirect(bool pFakeInput){UpdatePatternData();}
-		private void UpdatePatternDataRedirect(Color pFakeInput){UpdatePatternData();}
+	private void UpdatePatternDataRedirect(Color pFakeInput){UpdatePatternData();}
 
 	private void CreateIntInput (string pDisplayName, Action<int> pLinkedSetter, int pDefaultValue, int pMinValue, int pMaxValue, int pStepSize)
 	{

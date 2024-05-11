@@ -4,17 +4,18 @@ using System;
 public partial class BulletPatternData
 {
 	// Pattern Settings
-	private int BulletsPerBurst = 1;
-	private int BurstAmount = 3;
-	private float BurstInterval = 0.2f;
-	private bool Looping = true;
-	private float LoopDelay = 1f;
+	private int BulletsPerBurst;
+	private int BurstAmount;
+	private float BurstInterval;
+	private bool Looping;
+	private float LoopDelay;
 
 	// Bullet Settings
-	private Vector2 StartVelocity = new(700, 0);
-	private float LifeTime = 0.5f;
-	private Vector2 Scale = Vector2.One;
-	private Color Color = new(1, 1, 1, 1);
+	private Vector2 StartVelocity;
+	private float LifeTime;
+	private Vector2 Scale;
+	private Color Color;
+	private float Torque;
 
 
 
@@ -46,6 +47,9 @@ public partial class BulletPatternData
 
 	public Color GetColor() { return Color; }
 	public void SetColor(Color pVal) { Color = pVal; }
+
+	public float GetTorque() { return Torque; }
+	public void SetTorque(float pVal) { Torque = pVal; }
 
 	public BulletPatternData() {}
 }

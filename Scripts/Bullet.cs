@@ -11,6 +11,7 @@ public partial class Bullet : Sprite2D
 
 	private Vector2 GivenVelocity;
 	private float GivenLifetime;
+	private float GivenTorque;
 
 	public bool IsActivated() {return Activated;}
 
@@ -23,7 +24,8 @@ public partial class Bullet : Sprite2D
 
 		float DeltaTime = (float)delta;
 
-		Position += GivenVelocity * DeltaTime;
+	  RotationDegrees += GivenTorque * DeltaTime;
+		Position += GivenVelocity.Rotated(Rotation) * DeltaTime;
 		GivenLifetime -= DeltaTime;
 
 		if (GivenLifetime <= 0)
@@ -32,7 +34,7 @@ public partial class Bullet : Sprite2D
 		}
 	}
 
-	public void Setup(Vector2 pStartPosition, BulletPattern pParentPattern, Texture2D pTexture, Vector2 pVelocity, float pLifetime, Vector2 pScale, Color pColor)
+	public void Setup(Vector2 pStartPosition, BulletPattern pParentPattern, Texture2D pTexture, Vector2 pVelocity, float pLifetime, Vector2 pScale, Color pColor, float pTorque)
 	{
 		Position = pStartPosition;
 		ParentPattern = pParentPattern;
@@ -41,6 +43,7 @@ public partial class Bullet : Sprite2D
 		GivenLifetime = pLifetime;
 		Scale = pScale / 10;
 		Modulate = pColor;
+		GivenTorque = pTorque;
 	}
 
 	public void Activate()
@@ -53,5 +56,6 @@ public partial class Bullet : Sprite2D
 	{
 		Activated = false;
 		Visible = false;
+		Rotation = 0;
 	}
 }
