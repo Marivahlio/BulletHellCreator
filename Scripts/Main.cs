@@ -72,9 +72,10 @@ public partial class Main : Node
 		UpdatePatternData();
 	}
 
-	private void MoveOrigin(long offset = 0)
+	private void MoveOrigin()
 	{
 		Origin.GlobalPosition = Filler.GetScreenPosition() + Filler.GetGlobalRect().Size/2;
+		Filler.CustomMinimumSize = new Vector2(GetViewport().GetVisibleRect().Size.X / 3 * 2, Filler.Size.Y);
 	}
 
 	// the event subscription used in ConnectSignals expect vars to be given and won't work otherwhise, but we don't care about those
