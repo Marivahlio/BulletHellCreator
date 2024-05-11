@@ -42,8 +42,6 @@ public partial class Main : Node
 		{
 			inputObj.UpdateValue();
 		}
-
-		BulletPattern.Restart();
 	}
 
 	private void InstantiateData()

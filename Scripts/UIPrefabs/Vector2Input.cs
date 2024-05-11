@@ -30,27 +30,62 @@ public partial class Vector2Input : BaseInput
 		YValueSpinbox.MaxValue = pMaxValueY;
 		YValueSpinbox.Value = pDefaultValueY;
 		YValueSpinbox.Step = pStepSizeY;
+
+		ConnectSignals();
 	}
 
 	public override void UpdateValue()
+	{
+		LinkedSetter.Invoke((float)XValueSpinbox.Value, (float)YValueSpinbox.Value);	
+	}
+
+	private void ConnectSignals()
+	{
+		XValueSpinbox.ValueChanged += XValueChanged;
+		YValueSpinbox.ValueChanged += YValueChanged;
+	}
+
+	private void XValueChanged(double pNewValue)
 	{
 		if (DisableUpdateSignal)
 		{
 			return;
 		}
 
-		float newX = (float)XValueSpinbox.Value;
-		float newY = (float)YValueSpinbox.Value;
+		DisableUpdateSignal = true;
+		float newX = (float)Math.Round(pNewValue, 2);
 
 		if (Input.IsKeyPressed(Key.Shift)) // When shift is held, in/decrease the other fields value by the same value
 		{
-			DisableUpdateSignal = true;
-
 			if (newX != OldX)
 			{
 				YValueSpinbox.Value += newX - OldX;
 			}
+		}
+		else if (Input.IsKeyPressed(Key.Ctrl)) // When control is held, set the other fields value to the edited value
+		{
+			if (newX != OldX)
+			{
+				YValueSpinbox.Value = newX;
+			}
+		}
 
+		OldX = newX;
+		DisableUpdateSignal = false;
+	}
+
+	private void YValueChanged(double pNewValue)
+	{
+		if (DisableUpdateSignal)
+		{
+			return;
+		}
+
+		DisableUpdateSignal = true;
+		float newY = (float)Math.Round(pNewValue, 2);
+
+		if (Input.IsKeyPressed(Key.Shift)) // When shift is held, in/decrease the other fields value by the same value
+		{
 			if (newY != OldY)
 			{
 				XValueSpinbox.Value += newY - OldY;
@@ -58,22 +93,12 @@ public partial class Vector2Input : BaseInput
 		}
 		else if (Input.IsKeyPressed(Key.Ctrl)) // When control is held, set the other fields value to the edited value
 		{
-			DisableUpdateSignal = true;
-
-			if (newX != OldX)
-			{
-				YValueSpinbox.Value = newX;
-			}
-
 			if (newY != OldY)
 			{
 				XValueSpinbox.Value = newY;
 			}
 		}
 
-		LinkedSetter.Invoke(newX, newY);
-
-		OldX = newX;
 		OldY = newY;
 		DisableUpdateSignal = false;
 	}
