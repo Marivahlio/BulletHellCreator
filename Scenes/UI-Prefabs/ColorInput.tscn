@@ -1,0 +1,19 @@
+[gd_scene load_steps=2 format=3 uid="uid://ocq8u8cy7djq"]
+
+[ext_resource type="Script" path="res://Scripts/UIPrefabs/ColorInput.cs" id="1_wg5jr"]
+
+[node name="ColorInput" type="ColorRect" node_paths=PackedStringArray("ColorPicker")]
+custom_minimum_size = Vector2(170, 30)
+offset_right = 165.0
+offset_bottom = 30.0
+color = Color(0.211765, 0.239216, 0.290196, 0)
+script = ExtResource("1_wg5jr")
+ColorPicker = NodePath("ColorPickerButton")
+
+[node name="ColorPickerButton" type="ColorPickerButton" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

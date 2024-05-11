@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=3 uid="uid://bi7k52qe87adn"]
+[gd_scene load_steps=14 format=3 uid="uid://bi7k52qe87adn"]
 
 [ext_resource type="Script" path="res://Scripts/Main.cs" id="1_4xkno"]
 [ext_resource type="Texture2D" uid="uid://c2kl3rbn58r64" path="res://icon.svg" id="2_38uf6"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://drqj53tlx3slt" path="res://Scenes/UI-Prefabs/IntInput.tscn" id="5_8kwia"]
 [ext_resource type="PackedScene" uid="uid://cirog754fkfdn" path="res://Scenes/UI-Prefabs/BoolInput.tscn" id="5_upaxf"]
 [ext_resource type="PackedScene" uid="uid://caek8odeyim5h" path="res://Scenes/UI-Prefabs/V2Input.tscn" id="6_n1hwp"]
+[ext_resource type="PackedScene" uid="uid://ocq8u8cy7djq" path="res://Scenes/UI-Prefabs/ColorInput.tscn" id="7_xh28d"]
 [ext_resource type="Script" path="res://Scripts/BulletPool.cs" id="10_dnjb3"]
 [ext_resource type="PackedScene" uid="uid://b5ncdeyu101a4" path="res://Scenes/Bullet.tscn" id="11_nflrb"]
 [ext_resource type="Texture2D" uid="uid://b2hejrqa4w356" path="res://Assets/Sprites/Bullets/bullet1.png" id="12_n2bim"]
@@ -26,6 +27,7 @@ IntInputScene = ExtResource("5_8kwia")
 FloatInputScene = ExtResource("4_mnf5n")
 BoolInputScene = ExtResource("5_upaxf")
 Vector2InputScene = ExtResource("6_n1hwp")
+ColorInputScene = ExtResource("7_xh28d")
 
 [node name="BulletPool" type="Node" parent="."]
 script = ExtResource("10_dnjb3")

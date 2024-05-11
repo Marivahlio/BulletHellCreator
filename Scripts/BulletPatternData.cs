@@ -14,6 +14,7 @@ public partial class BulletPatternData
 	private Vector2 StartVelocity = new(700, 0);
 	private float LifeTime = 0.5f;
 	private Vector2 Scale = Vector2.One;
+	private Color Color = new(1, 1, 1, 1);
 
 
 
@@ -42,6 +43,9 @@ public partial class BulletPatternData
 
 	public Vector2 GetScale() { return Scale; }
 	public void SetScale(float pX, float pY) { Scale.X = pX; Scale.Y = pY; }
+
+	public Color GetColor() { return Color; }
+	public void SetColor(Color pVal) { Color = pVal; }
 
 	public BulletPatternData() {}
 }

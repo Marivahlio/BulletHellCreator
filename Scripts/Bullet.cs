@@ -32,7 +32,7 @@ public partial class Bullet : Sprite2D
 		}
 	}
 
-	public void Setup(Vector2 pStartPosition, BulletPattern pParentPattern, Texture2D pTexture, Vector2 pVelocity, float pLifetime, Vector2 pScale)
+	public void Setup(Vector2 pStartPosition, BulletPattern pParentPattern, Texture2D pTexture, Vector2 pVelocity, float pLifetime, Vector2 pScale, Color pColor)
 	{
 		Position = pStartPosition;
 		ParentPattern = pParentPattern;
@@ -40,6 +40,7 @@ public partial class Bullet : Sprite2D
 		GivenVelocity = pVelocity;
 		GivenLifetime = pLifetime;
 		Scale = pScale / 10;
+		Modulate = pColor;
 	}
 
 	public void Activate()

@@ -19,6 +19,7 @@ public partial class Main : Node
 	[Export] private PackedScene FloatInputScene;
 	[Export] private PackedScene BoolInputScene;
 	[Export] private PackedScene Vector2InputScene;
+	[Export] private PackedScene ColorInputScene;
 
 	private List<BaseInput> InputItems = new();
 
@@ -59,6 +60,7 @@ public partial class Main : Node
 		CreateVector2Input(	"Start Velocity", 		BulletPattern.GetPatternData().SetStartVelocity, 700, 0, -10000, -10000, 10000, 10000, 0.01f, 0.01f);
 		CreateFloatInput(		"Lifetime", 					BulletPattern.GetPatternData().SetLifeTime, 0.5f, 0.01f, 20f, 0.01f);
 		CreateVector2Input(	"Scale", 							BulletPattern.GetPatternData().SetScale, 1, 1, 0.05f, 0.05f, 10, 10, 0.01f, 0.01f);
+		CreateColorInput(		"Color", 							BulletPattern.GetPatternData().SetColor, new Color(1, 1, 1, 1));
 
 		// Show first tab by default
 		MainTabContainer.CurrentTab = 0;
@@ -67,6 +69,7 @@ public partial class Main : Node
 	// the event subscription used in ConnectSignals expect vars to be given and won't work otherwhise, but we don't care about those
 	private void UpdatePatternDataRedirect(double pFakeInput){UpdatePatternData();}
 	private void UpdatePatternDataRedirect(bool pFakeInput){UpdatePatternData();}
+		private void UpdatePatternDataRedirect(Color pFakeInput){UpdatePatternData();}
 
 	private void CreateIntInput (string pDisplayName, Action<int> pLinkedSetter, int pDefaultValue, int pMinValue, int pMaxValue, int pStepSize)
 	{
@@ -107,6 +110,17 @@ public partial class Main : Node
 		InputObj.SetData(pLinkedSetter, pDefaultValueX, pDefaultValueY, pMinValueX, pMinValueY, pMaxValueX, pMaxValueY, pStepSizeX, pStepSizeY);
 		InputObj.GetInputItemX().ValueChanged += UpdatePatternDataRedirect;
 		InputObj.GetInputItemY().ValueChanged += UpdatePatternDataRedirect;
+		InputItems.Add(InputObj);
+		InputContainers[MainTabContainer.CurrentTab].AddChild(InputObj);
+
+		CreateGenericTextObject(pDisplayName);
+	}
+
+	private void CreateColorInput (string pDisplayName, Action<Color> pLinkedSetter, Color pDefaultValue)
+	{
+		ColorInput InputObj = (ColorInput)ColorInputScene.Instantiate();
+		InputObj.SetData(pLinkedSetter, pDefaultValue);
+		InputObj.GetInputItem().ColorChanged += UpdatePatternDataRedirect;
 		InputItems.Add(InputObj);
 		InputContainers[MainTabContainer.CurrentTab].AddChild(InputObj);
 
