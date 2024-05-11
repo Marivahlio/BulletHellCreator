@@ -5,6 +5,8 @@ using Godot;
 
 public partial class Main : Node
 {
+	public enum BulletDistributionTypes {Even, Custom}
+
 	[ExportGroup("General References")] 
 	[Export] public Node2D Origin;
 	[Export] private BulletPattern BulletPattern;
@@ -20,6 +22,7 @@ public partial class Main : Node
 	[Export] private PackedScene BoolInputScene;
 	[Export] private PackedScene Vector2InputScene;
 	[Export] private PackedScene ColorInputScene;
+	[Export] private PackedScene EnumInputScene;
 
 	private List<BaseInput> InputItems = new();
 
@@ -65,6 +68,8 @@ public partial class Main : Node
 		CreateVector2Input(	"Scale", 							BulletPattern.GetPatternData().SetScale, 2, 2, 0.05f, 0.05f, 10, 10, 0.01f, 0.01f);
 		CreateColorInput(		"Color", 							BulletPattern.GetPatternData().SetColor, new Color(1, 1, 1, 1));
 		CreateFloatInput(		"Torque", 						BulletPattern.GetPatternData().SetTorque, 0, -360f, 360f, 0.01f);
+		EnumInput test = CreateEnumInput(		"Distribution", 			BulletPattern.GetPatternData().SetBulletDistribution, typeof(BulletDistributionTypes));
+		CreateIntInput(			"TEST", 							BulletPattern.GetPatternData().SetBurstAmount, 3, 1, 50, 1, new Condition(test, 1));
 
 		// Show first tab by default
 		MainTabContainer.CurrentTab = 0;
@@ -80,10 +85,11 @@ public partial class Main : Node
 
 	// the event subscription used in ConnectSignals expect vars to be given and won't work otherwhise, but we don't care about those
 	private void UpdatePatternDataRedirect(double pFakeInput){UpdatePatternData();}
+	private void UpdatePatternDataRedirect(long pFakeInput){UpdatePatternData();}
 	private void UpdatePatternDataRedirect(bool pFakeInput){UpdatePatternData();}
 	private void UpdatePatternDataRedirect(Color pFakeInput){UpdatePatternData();}
 
-	private void CreateIntInput (string pDisplayName, Action<int> pLinkedSetter, int pDefaultValue, int pMinValue, int pMaxValue, int pStepSize)
+	private void CreateIntInput (string pDisplayName, Action<int> pLinkedSetter, int pDefaultValue, int pMinValue, int pMaxValue, int pStepSize, ConditionI pCondition = null )
 	{
 		IntInput InputObj = (IntInput)IntInputScene.Instantiate();
 		InputObj.SetData(pLinkedSetter, pDefaultValue, pMinValue, pMaxValue, pStepSize);
@@ -91,7 +97,12 @@ public partial class Main : Node
 		InputItems.Add(InputObj);
 		InputContainers[MainTabContainer.CurrentTab].AddChild(InputObj);
 
-		CreateGenericTextObject(pDisplayName);
+		InputObj.SetLinkedTextObject(CreateGenericTextObject(pDisplayName));
+
+		if (pCondition != null)
+		{
+			InputObj.SetCondition(pCondition);
+		}
 	}
 
 	private void CreateFloatInput (string pDisplayName, Action<float> pLinkedSetter, float pDefaultValue, float pMinValue, float pMaxValue, float pStepSize)
@@ -102,7 +113,7 @@ public partial class Main : Node
 		InputItems.Add(InputObj);
 		InputContainers[MainTabContainer.CurrentTab].AddChild(InputObj);
 
-		CreateGenericTextObject(pDisplayName);
+		InputObj.SetLinkedTextObject(CreateGenericTextObject(pDisplayName));
 	}
 
 	private void CreateBoolInput (string pDisplayName, Action<bool> pLinkedSetter, bool pDefaultValue)
@@ -113,7 +124,7 @@ public partial class Main : Node
 		InputItems.Add(InputObj);
 		InputContainers[MainTabContainer.CurrentTab].AddChild(InputObj);
 
-		CreateGenericTextObject(pDisplayName);
+		InputObj.SetLinkedTextObject(CreateGenericTextObject(pDisplayName));
 	}
 
 	private void CreateVector2Input (string pDisplayName, Action<float, float> pLinkedSetter, float pDefaultValueX, float pDefaultValueY, float pMinValueX, float pMinValueY, float pMaxValueX, float pMaxValueY, float pStepSizeX, float pStepSizeY)
@@ -125,7 +136,7 @@ public partial class Main : Node
 		InputItems.Add(InputObj);
 		InputContainers[MainTabContainer.CurrentTab].AddChild(InputObj);
 
-		CreateGenericTextObject(pDisplayName);
+		InputObj.SetLinkedTextObject(CreateGenericTextObject(pDisplayName));
 	}
 
 	private void CreateColorInput (string pDisplayName, Action<Color> pLinkedSetter, Color pDefaultValue)
@@ -136,13 +147,42 @@ public partial class Main : Node
 		InputItems.Add(InputObj);
 		InputContainers[MainTabContainer.CurrentTab].AddChild(InputObj);
 
-		CreateGenericTextObject(pDisplayName);
+		InputObj.SetLinkedTextObject(CreateGenericTextObject(pDisplayName));
 	}
 
-	private void CreateGenericTextObject(string pDisplayName)
+	private EnumInput CreateEnumInput (string pDisplayName, Action<int> pLinkedSetter, Type pEnum)
+	{
+		EnumInput InputObj = (EnumInput)EnumInputScene.Instantiate();
+		InputObj.SetData(pLinkedSetter, pEnum);
+		InputObj.GetInputItem().ItemSelected += UpdatePatternDataRedirect;
+		InputItems.Add(InputObj);
+		InputContainers[MainTabContainer.CurrentTab].AddChild(InputObj);
+
+		InputObj.SetLinkedTextObject(CreateGenericTextObject(pDisplayName));
+
+		return InputObj;
+	}
+
+	private GenericText CreateGenericTextObject(string pDisplayName)
 	{
 		GenericText TextObj = (GenericText)GenericTextScene.Instantiate();
 		TextObj.SetData(pDisplayName);
 		TextContainers[MainTabContainer.CurrentTab].AddChild(TextObj);
+
+		return TextObj;
 	}
+}
+
+public struct Condition : ConditionI
+{
+	public Condition(EnumInput pEnumInput, int pValue) { LinkedEnumInput = pEnumInput; EnumValue = pValue;}
+
+	public EnumInput LinkedEnumInput {get; set;}
+	public int EnumValue {get; set;}
+}
+
+public interface ConditionI 
+{
+	EnumInput LinkedEnumInput {get; set;}
+	int EnumValue {get; set;}
 }

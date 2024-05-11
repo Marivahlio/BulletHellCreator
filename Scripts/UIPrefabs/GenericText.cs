@@ -1,7 +1,7 @@
 using Godot;
 using System;
 
-public partial class GenericText : Node
+public partial class GenericText : Control
 {
 	[Export] public Label TextLabel;
 
