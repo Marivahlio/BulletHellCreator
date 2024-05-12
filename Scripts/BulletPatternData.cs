@@ -16,7 +16,8 @@ public partial class BulletPatternData
 	private Vector2 Scale;
 	private Color Color;
 	private float Torque;
-	private Main.BulletDistributionTypes BulletDistribution; 
+	private Main.BulletDistributionTypes BulletDistribution;
+	private float CustomBulletDistributionDistance; 
 
 
 	// Pattern Settings
@@ -53,7 +54,9 @@ public partial class BulletPatternData
 
 	public int GetBulletDistribution() { return (int)BulletDistribution; }
 	public void SetBulletDistribution(int pVal) { BulletDistribution = (Main.BulletDistributionTypes)pVal; }
-	// public void SetBulletDistribution(Main.BulletDistributionTypes pVal) { BulletDistribution = pVal; }
+
+	public float GetCustomBulletDistributionDistance() { return CustomBulletDistributionDistance; }
+	public void SetCustomBulletDistributionDistance(float pVal) { CustomBulletDistributionDistance = pVal; }
 
 	public BulletPatternData() {}
 }

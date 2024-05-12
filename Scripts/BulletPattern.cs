@@ -67,7 +67,19 @@ public partial class BulletPattern : Node
 	{
 		for (int i = 0; i < pBullets.Count; i++)
 		{
-			Vector2 RotatedStartVelocity = PatternData.GetStartVelocity().Rotated(i*45); // TODO: remove this once spawn shapes are in
+			Vector2 RotatedStartVelocity = Vector2.Zero;
+
+			switch (PatternData.GetBulletDistribution())
+			{
+				case (int)Main.BulletDistributionTypes.Custom:
+					int RotationOffset = i % 2 == 0 ? -1 : 1;
+					RotatedStartVelocity = PatternData.GetStartVelocity().Rotated(DegreesToRadians((float)Math.Ceiling(i/2.0f) * PatternData.GetCustomBulletDistributionDistance() * RotationOffset));
+				break;
+
+				case (int)Main.BulletDistributionTypes.Even:
+					RotatedStartVelocity = PatternData.GetStartVelocity().Rotated(DegreesToRadians(i * (360.0f/pBullets.Count)));
+				break;
+			}
 
 			// TODO: once more values are in like emitter shapes and nested bulletpatterns, just pass the pattern as first param, and then the params that
 			// are not in the pattern like position.
@@ -76,5 +88,10 @@ public partial class BulletPattern : Node
 		}
 
 		BurstAmount--;
+	}
+
+	private static float DegreesToRadians(float pDegrees)
+	{
+		return pDegrees * (float)(Math.PI/180);
 	}
 }

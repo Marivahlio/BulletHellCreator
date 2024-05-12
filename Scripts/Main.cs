@@ -55,21 +55,21 @@ public partial class Main : Node
 	{
 		// Pattern Settings Tab
 		MainTabContainer.CurrentTab = 0;
-		CreateIntInput(			"Bullets Per Burst", 	BulletPattern.GetPatternData().SetBulletsPerBurst, 1, 1, 50, 1);
-		CreateIntInput(			"Burst Amount", 			BulletPattern.GetPatternData().SetBurstAmount, 3, 1, 50, 1);
-		CreateFloatInput(		"Burst Interval", 		BulletPattern.GetPatternData().SetBurstInterval, 0.1f, 0.01f, 10f, 0.01f);
-		CreateBoolInput(		"Looping", 						BulletPattern.GetPatternData().SetLooping, true);
-		CreateFloatInput(		"Loop Delay", 				BulletPattern.GetPatternData().SetLoopDelay, 0, 0, 10, 0.01f);
+		CreateIntInput(																			"Bullets Per Burst", 	BulletPattern.GetPatternData().SetBulletsPerBurst, 1, 1, 50, 1);
+		CreateIntInput(																			"Burst Amount", 			BulletPattern.GetPatternData().SetBurstAmount, 3, 1, 50, 1);
+		CreateFloatInput(																		"Burst Interval", 		BulletPattern.GetPatternData().SetBurstInterval, 0.1f, 0.01f, 10f, 0.01f);
+		CreateBoolInput(																		"Looping", 						BulletPattern.GetPatternData().SetLooping, true);
+		CreateFloatInput(																		"Loop Delay", 				BulletPattern.GetPatternData().SetLoopDelay, 0, 0, 10, 0.01f);
 
 		// Bullet Settings Tab
 		MainTabContainer.CurrentTab = 1;
-		CreateVector2Input(	"Start Velocity", 		BulletPattern.GetPatternData().SetStartVelocity, 700, 0, -10000, -10000, 10000, 10000, 0.01f, 0.01f);
-		CreateFloatInput(		"Lifetime", 					BulletPattern.GetPatternData().SetLifeTime, 1.0f, 0.01f, 20f, 0.01f);
-		CreateVector2Input(	"Scale", 							BulletPattern.GetPatternData().SetScale, 2, 2, 0.05f, 0.05f, 10, 10, 0.01f, 0.01f);
-		CreateColorInput(		"Color", 							BulletPattern.GetPatternData().SetColor, new Color(1, 1, 1, 1));
-		CreateFloatInput(		"Torque", 						BulletPattern.GetPatternData().SetTorque, 0, -360f, 360f, 0.01f);
-		EnumInput test = CreateEnumInput(		"Distribution", 			BulletPattern.GetPatternData().SetBulletDistribution, typeof(BulletDistributionTypes));
-		CreateIntInput(			"TEST", 							BulletPattern.GetPatternData().SetBurstAmount, 3, 1, 50, 1, new Condition(test, 1));
+		CreateVector2Input(																	"Start Velocity", 		BulletPattern.GetPatternData().SetStartVelocity, 700, 0, -10000, -10000, 10000, 10000, 0.01f, 0.01f);
+		CreateFloatInput(																		"Lifetime", 					BulletPattern.GetPatternData().SetLifeTime, 1.0f, 0.01f, 20f, 0.01f);
+		CreateVector2Input(																	"Scale", 							BulletPattern.GetPatternData().SetScale, 2, 2, 0.05f, 0.05f, 10, 10, 0.01f, 0.01f);
+		CreateColorInput(																		"Color", 							BulletPattern.GetPatternData().SetColor, new Color(1, 1, 1, 1));
+		CreateFloatInput(																		"Torque", 						BulletPattern.GetPatternData().SetTorque, 0, -360f, 360f, 0.01f);
+		EnumInput DistributionInput = CreateEnumInput(			"Distribution", 			BulletPattern.GetPatternData().SetBulletDistribution, typeof(BulletDistributionTypes));
+		CreateFloatInput(																		"Seperation", 				BulletPattern.GetPatternData().SetCustomBulletDistributionDistance, 45, -360, 360, 0.01f, new Condition(DistributionInput, 1));
 
 		// Show first tab by default
 		MainTabContainer.CurrentTab = 0;
@@ -89,7 +89,7 @@ public partial class Main : Node
 	private void UpdatePatternDataRedirect(bool pFakeInput){UpdatePatternData();}
 	private void UpdatePatternDataRedirect(Color pFakeInput){UpdatePatternData();}
 
-	private void CreateIntInput (string pDisplayName, Action<int> pLinkedSetter, int pDefaultValue, int pMinValue, int pMaxValue, int pStepSize, ConditionI pCondition = null )
+	private void CreateIntInput (string pDisplayName, Action<int> pLinkedSetter, int pDefaultValue, int pMinValue, int pMaxValue, int pStepSize, ConditionI pCondition = null)
 	{
 		IntInput InputObj = (IntInput)IntInputScene.Instantiate();
 		InputObj.SetData(pLinkedSetter, pDefaultValue, pMinValue, pMaxValue, pStepSize);
@@ -105,7 +105,7 @@ public partial class Main : Node
 		}
 	}
 
-	private void CreateFloatInput (string pDisplayName, Action<float> pLinkedSetter, float pDefaultValue, float pMinValue, float pMaxValue, float pStepSize)
+	private void CreateFloatInput (string pDisplayName, Action<float> pLinkedSetter, float pDefaultValue, float pMinValue, float pMaxValue, float pStepSize, ConditionI pCondition = null)
 	{
 		FloatInput InputObj = (FloatInput)FloatInputScene.Instantiate();
 		InputObj.SetData(pLinkedSetter, pDefaultValue, pMinValue, pMaxValue, pStepSize);
@@ -114,9 +114,14 @@ public partial class Main : Node
 		InputContainers[MainTabContainer.CurrentTab].AddChild(InputObj);
 
 		InputObj.SetLinkedTextObject(CreateGenericTextObject(pDisplayName));
+
+		if (pCondition != null)
+		{
+			InputObj.SetCondition(pCondition);
+		}
 	}
 
-	private void CreateBoolInput (string pDisplayName, Action<bool> pLinkedSetter, bool pDefaultValue)
+	private void CreateBoolInput (string pDisplayName, Action<bool> pLinkedSetter, bool pDefaultValue, ConditionI pCondition = null)
 	{
 		BoolInput InputObj = (BoolInput)BoolInputScene.Instantiate();
 		InputObj.SetData(pLinkedSetter, pDefaultValue);
@@ -125,9 +130,14 @@ public partial class Main : Node
 		InputContainers[MainTabContainer.CurrentTab].AddChild(InputObj);
 
 		InputObj.SetLinkedTextObject(CreateGenericTextObject(pDisplayName));
+
+		if (pCondition != null)
+		{
+			InputObj.SetCondition(pCondition);
+		}
 	}
 
-	private void CreateVector2Input (string pDisplayName, Action<float, float> pLinkedSetter, float pDefaultValueX, float pDefaultValueY, float pMinValueX, float pMinValueY, float pMaxValueX, float pMaxValueY, float pStepSizeX, float pStepSizeY)
+	private void CreateVector2Input (string pDisplayName, Action<float, float> pLinkedSetter, float pDefaultValueX, float pDefaultValueY, float pMinValueX, float pMinValueY, float pMaxValueX, float pMaxValueY, float pStepSizeX, float pStepSizeY, ConditionI pCondition = null)
 	{
 		Vector2Input InputObj = (Vector2Input)Vector2InputScene.Instantiate();
 		InputObj.SetData(pLinkedSetter, pDefaultValueX, pDefaultValueY, pMinValueX, pMinValueY, pMaxValueX, pMaxValueY, pStepSizeX, pStepSizeY);
@@ -137,9 +147,14 @@ public partial class Main : Node
 		InputContainers[MainTabContainer.CurrentTab].AddChild(InputObj);
 
 		InputObj.SetLinkedTextObject(CreateGenericTextObject(pDisplayName));
+
+		if (pCondition != null)
+		{
+			InputObj.SetCondition(pCondition);
+		}
 	}
 
-	private void CreateColorInput (string pDisplayName, Action<Color> pLinkedSetter, Color pDefaultValue)
+	private void CreateColorInput (string pDisplayName, Action<Color> pLinkedSetter, Color pDefaultValue, ConditionI pCondition = null)
 	{
 		ColorInput InputObj = (ColorInput)ColorInputScene.Instantiate();
 		InputObj.SetData(pLinkedSetter, pDefaultValue);
@@ -148,9 +163,14 @@ public partial class Main : Node
 		InputContainers[MainTabContainer.CurrentTab].AddChild(InputObj);
 
 		InputObj.SetLinkedTextObject(CreateGenericTextObject(pDisplayName));
+
+		if (pCondition != null)
+		{
+			InputObj.SetCondition(pCondition);
+		}
 	}
 
-	private EnumInput CreateEnumInput (string pDisplayName, Action<int> pLinkedSetter, Type pEnum)
+	private EnumInput CreateEnumInput (string pDisplayName, Action<int> pLinkedSetter, Type pEnum, ConditionI pCondition = null)
 	{
 		EnumInput InputObj = (EnumInput)EnumInputScene.Instantiate();
 		InputObj.SetData(pLinkedSetter, pEnum);
@@ -159,6 +179,11 @@ public partial class Main : Node
 		InputContainers[MainTabContainer.CurrentTab].AddChild(InputObj);
 
 		InputObj.SetLinkedTextObject(CreateGenericTextObject(pDisplayName));
+
+		if (pCondition != null)
+		{
+			InputObj.SetCondition(pCondition);
+		}
 
 		return InputObj;
 	}
