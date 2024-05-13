@@ -6,7 +6,8 @@ public partial class Bullet : Sprite2D
 	[Signal]
 	public delegate void BulletDeactivatedEventHandler(Bullet pBullet);
 
-	private BulletPattern ParentPattern;
+	private BulletPattern ParentPattern = null;
+	private BulletPattern SubEmitter = null;
 	private bool Activated;
 
 	private Vector2 GivenVelocity;
@@ -33,17 +34,24 @@ public partial class Bullet : Sprite2D
 			EmitSignal(nameof(BulletDeactivated), this);
 		}
 	}
-
-	public void Setup(Vector2 pStartPosition, BulletPattern pParentPattern, Texture2D pTexture, Vector2 pVelocity, float pLifetime, Vector2 pScale, Color pColor, float pTorque)
+ 
+	public void Setup(BulletPattern pParentPattern, Vector2 pStartPosition, Texture2D pTexture, Vector2 pStartVelocity)
 	{
-		Position = pStartPosition;
+		if (pParentPattern.GetPatternData().GetSubEmitter() != null)
+		{
+			SubEmitter.SetPool(pParentPattern.GetPool());
+		}
+
+
 		ParentPattern = pParentPattern;
+		Position = pStartPosition;
 		Texture = pTexture;
-		GivenVelocity = pVelocity;
-		GivenLifetime = pLifetime;
-		Scale = pScale / 10;
-		Modulate = pColor;
-		GivenTorque = pTorque;
+		GivenVelocity = pStartVelocity;
+
+		GivenLifetime = pParentPattern.GetPatternData().GetLifeTime();
+		Scale = pParentPattern.GetPatternData().GetScale() / 10;
+		Modulate = pParentPattern.GetPatternData().GetColor();
+		GivenTorque = pParentPattern.GetPatternData().GetTorque();
 	}
 
 	public void Activate()
@@ -57,5 +65,10 @@ public partial class Bullet : Sprite2D
 		Activated = false;
 		Visible = false;
 		Rotation = 0;
+
+		foreach (BulletPattern subEmitter in GetChildren())
+		{
+			subEmitter.QueueFree();
+		}
 	}
 }

@@ -1,0 +1,18 @@
+[gd_resource type="Resource" load_steps=2 format=3 uid="uid://cbe10nfflky8o"]
+
+[ext_resource type="Script" path="res://Scripts/BulletPatternData.cs" id="1_riiq2"]
+
+[resource]
+script = ExtResource("1_riiq2")
+BulletsPerBurst = 1
+BurstAmount = 3
+BurstInterval = 0.1
+Looping = true
+LoopDelay = 0.0
+StartVelocity = Vector2(700, 0)
+LifeTime = 1.0
+Scale = Vector2(2, 2)
+Color = Color(0.313726, 1, 0, 1)
+Torque = 0.0
+BulletDistribution = 0
+CustomBulletDistributionDistance = 45.0

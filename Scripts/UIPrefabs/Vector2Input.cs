@@ -7,6 +7,7 @@ public partial class Vector2Input : BaseInput
 	[Export] public SpinBox YValueSpinbox;
 
 	private Action<float, float> LinkedSetter;
+	private Func<Vector2> LinkedGetter;
 
 	private float OldX;
 	private float OldY;
@@ -15,8 +16,9 @@ public partial class Vector2Input : BaseInput
 	public SpinBox GetInputItemX() {return XValueSpinbox;}
 	public SpinBox GetInputItemY() {return YValueSpinbox;}
 
-	public void SetData(Action<float, float> pLinkedSetter, float pDefaultValueX, float pDefaultValueY, float pMinValueX, float pMinValueY, float pMaxValueX, float pMaxValueY, float pStepSizeX, float pStepSizeY)
+	public void SetData(Func<Vector2> pLinkedGetter, Action<float, float> pLinkedSetter, float pDefaultValueX, float pDefaultValueY, float pMinValueX, float pMinValueY, float pMaxValueX, float pMaxValueY, float pStepSizeX, float pStepSizeY)
 	{
+		LinkedGetter = pLinkedGetter;
 		LinkedSetter = pLinkedSetter;
 
 		// X
@@ -34,9 +36,15 @@ public partial class Vector2Input : BaseInput
 		ConnectSignals();
 	}
 
-	public override void UpdateValue()
+	public override void UpdateDataValue()
 	{
 		LinkedSetter.Invoke((float)XValueSpinbox.Value, (float)YValueSpinbox.Value);	
+	}
+
+	public override void UpdateInputValue()
+	{
+		XValueSpinbox.Value = LinkedGetter().X;
+		YValueSpinbox.Value = LinkedGetter().Y;
 	}
 
 	private void ConnectSignals()

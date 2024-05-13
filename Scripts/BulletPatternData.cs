@@ -1,23 +1,24 @@
 using Godot;
 using System;
 
-public partial class BulletPatternData
+public partial class BulletPatternData : Resource
 {
 	// Pattern Settings
-	private int BulletsPerBurst;
-	private int BurstAmount;
-	private float BurstInterval;
-	private bool Looping;
-	private float LoopDelay;
+	[Export] private int BulletsPerBurst;
+	[Export] private int BurstAmount;
+	[Export] private float BurstInterval;
+	[Export] private bool Looping;
+	[Export] private float LoopDelay;
+	private BulletPattern SubEmitter = null; // TODO: export
 
 	// Bullet Settings
-	private Vector2 StartVelocity;
-	private float LifeTime;
-	private Vector2 Scale;
-	private Color Color;
-	private float Torque;
-	private Main.BulletDistributionTypes BulletDistribution;
-	private float CustomBulletDistributionDistance; 
+	[Export] private Vector2 StartVelocity;
+	[Export] private float LifeTime;
+	[Export] private Vector2 Scale;
+	[Export] private Color Color;
+	[Export] private float Torque;
+	[Export] private Main.BulletDistributionTypes BulletDistribution;
+	[Export] private float CustomBulletDistributionDistance; 
 
 
 	// Pattern Settings
@@ -58,5 +59,40 @@ public partial class BulletPatternData
 	public float GetCustomBulletDistributionDistance() { return CustomBulletDistributionDistance; }
 	public void SetCustomBulletDistributionDistance(float pVal) { CustomBulletDistributionDistance = pVal; }
 
+	public BulletPattern GetSubEmitter() { return SubEmitter; }
+	public void SetSubEmitter(BulletPattern pVal) { SubEmitter = pVal; }
+
 	public BulletPatternData() {}
+
+	public void SaveData(string pFilePath)
+	{
+		Error errorMsg = ResourceSaver.Save(this, pFilePath);
+
+		if (errorMsg != Error.Ok)
+		{
+			GD.PrintErr("Failed to save file: " + errorMsg.ToString());
+			return;
+		}
+
+		GD.Print("Trying to save file: " + pFilePath);
+	}
+
+	public void LoadData(BulletPatternData pData)
+	{
+		// Pattern Settings
+		BulletsPerBurst = pData.GetBulletsPerBurst();
+		BurstAmount = pData.GetBurstAmount();
+		BurstInterval = pData.GetBurstInterval();
+		Looping = pData.GetLooping();
+		LoopDelay = pData.GetLoopDelay();
+
+		// Bullet Settings
+		StartVelocity = pData.GetStartVelocity();
+		LifeTime = pData.GetLifeTime();
+		Scale = pData.GetScale();
+		Color = pData.GetColor();
+		Torque = pData.GetTorque();
+		BulletDistribution = (Main.BulletDistributionTypes)pData.GetBulletDistribution();
+		CustomBulletDistributionDistance = pData.GetCustomBulletDistributionDistance();
+	}
 }

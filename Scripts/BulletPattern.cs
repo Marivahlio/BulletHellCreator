@@ -4,8 +4,8 @@ using System.Collections.Generic;
 
 public partial class BulletPattern : Node
 {
-	[Export] public BulletPool Pool;
-	[Export] public Texture2D Texture;
+	[Export] private BulletPool Pool;
+	[Export] private Texture2D Texture;
 
 	private BulletPatternData PatternData = new(); 
 
@@ -14,6 +14,10 @@ public partial class BulletPattern : Node
 	private float LoopDelay;
 
 	public BulletPatternData GetPatternData() {return PatternData;}
+	public void SetPatternData(BulletPatternData pPatternData) {PatternData = pPatternData;}
+
+	public BulletPool GetPool() {return Pool;}
+	public void SetPool(BulletPool pPool) {Pool = pPool;}
 
 	public override void _Ready()
 	{
@@ -29,6 +33,11 @@ public partial class BulletPattern : Node
 
 	public void Restart()
 	{
+		if (PatternData.GetSubEmitter() != null)
+		{
+			PatternData.GetSubEmitter().Restart();
+		}
+
 		Pool.DeactivateAll();
 		RefreshData();
 	}
@@ -83,7 +92,7 @@ public partial class BulletPattern : Node
 
 			// TODO: once more values are in like emitter shapes and nested bulletpatterns, just pass the pattern as first param, and then the params that
 			// are not in the pattern like position.
-			pBullets[i].Setup(GetParent<Node2D>().Position, null, Texture, RotatedStartVelocity, PatternData.GetLifeTime(), PatternData.GetScale(), PatternData.GetColor(), PatternData.GetTorque());
+			pBullets[i].Setup(this, GetParent<Node2D>().Position, Texture, RotatedStartVelocity);
 			pBullets[i].Activate();
 		}
 

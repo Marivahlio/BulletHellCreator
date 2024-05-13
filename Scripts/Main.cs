@@ -14,6 +14,8 @@ public partial class Main : Node
 	[Export] private VBoxContainer[] InputContainers; // Index = tab order
 	[Export] private TabContainer MainTabContainer;
 	[Export] private Control Filler;
+	[Export] private FileDialog SaveFileDialog;
+	[Export] private FileDialog LoadFileDialog;
 
 	[ExportGroup("UI Prefabs")] 
 	[Export] private PackedScene GenericTextScene;
@@ -25,56 +27,111 @@ public partial class Main : Node
 	[Export] private PackedScene EnumInputScene;
 
 	private List<BaseInput> InputItems = new();
+	private bool UpdatingValues = false;
 
 	public override void _Ready()
 	{
 		InstantiateData();
-		UpdatePatternData();
+		UpdateDataValue();
 	}
 
 	public override void _Process(double delta)
 	{
 		if (Input.IsKeyPressed(Key.R))
 		{
-			UpdatePatternData();
+			UpdateDataValue();
 			BulletPattern.Restart();
 		}
 		
 		MoveOrigin();
 	}
 
-	public void UpdatePatternData()
+	public void UpdateDataValue()
 	{
+		if (UpdatingValues)
+		{	
+			return; 
+		}
+
+		UpdatingValues = true;
+
 		foreach (BaseInput inputObj in InputItems)
 		{
-			inputObj.UpdateValue();
+			inputObj.UpdateDataValue();
 		}
+
+		UpdatingValues = false;
+	}
+
+	public void UpdateInputValue()
+	{
+		if (UpdatingValues)
+		{	
+			return; 
+		}
+
+		UpdatingValues = true;
+		
+		foreach (BaseInput inputObj in InputItems)
+		{
+			inputObj.UpdateInputValue();
+		}
+
+		UpdatingValues = false;
+	}
+
+	public void ShowSavePatternDataDialog()
+	{
+		SaveFileDialog.CurrentDir = "res://Saved/BulletPatterns";
+		SaveFileDialog.Show();
+	}
+
+	public void ShowLoadPatternDataDialog()
+	{
+		LoadFileDialog.CurrentDir = "res://Saved/BulletPatterns";
+		LoadFileDialog.Show();
+	}
+
+	public void SavePatternData()
+	{
+		BulletPattern.GetPatternData().SaveData(SaveFileDialog.CurrentDir + "/" + SaveFileDialog.CurrentFile);
+	}
+
+	public void LoadPatternData(string pFilePath)
+	{
+		GD.Print("user selected file to load at path: " + pFilePath);
+		BulletPatternData LoadedData = ResourceLoader.Load<BulletPatternData>(pFilePath);
+		BulletPattern.GetPatternData().LoadData(LoadedData);
+		UpdateInputValue();
+		BulletPattern.Restart();
 	}
 
 	private void InstantiateData()
 	{
+		BulletPatternData patternData = BulletPattern.GetPatternData();
+
 		// Pattern Settings Tab
 		MainTabContainer.CurrentTab = 0;
-		CreateIntInput(																			"Bullets Per Burst", 	BulletPattern.GetPatternData().SetBulletsPerBurst, 1, 1, 50, 1);
-		CreateIntInput(																			"Burst Amount", 			BulletPattern.GetPatternData().SetBurstAmount, 3, 1, 50, 1);
-		CreateFloatInput(																		"Burst Interval", 		BulletPattern.GetPatternData().SetBurstInterval, 0.1f, 0.01f, 10f, 0.01f);
-		CreateBoolInput(																		"Looping", 						BulletPattern.GetPatternData().SetLooping, true);
-		CreateFloatInput(																		"Loop Delay", 				BulletPattern.GetPatternData().SetLoopDelay, 0, 0, 10, 0.01f);
+		CreateIntInput(																			"Bullets Per Burst",  patternData.GetBulletsPerBurst, patternData.SetBulletsPerBurst, 1, 1, 50, 1);
+		CreateIntInput(																			"Burst Amount", 			patternData.GetBurstAmount, patternData.SetBurstAmount, 3, 1, 50, 1);
+		CreateFloatInput(																		"Burst Interval", 		patternData.GetBurstInterval, patternData.SetBurstInterval, 0.1f, 0.01f, 10f, 0.01f);
+		CreateBoolInput(																		"Looping", 						patternData.GetLooping, patternData.SetLooping, true);
+		CreateFloatInput(																		"Loop Delay", 				patternData.GetLoopDelay, patternData.SetLoopDelay, 0, 0, 10, 0.01f);
 
 		// Bullet Settings Tab
 		MainTabContainer.CurrentTab = 1;
-		CreateVector2Input(																	"Start Velocity", 		BulletPattern.GetPatternData().SetStartVelocity, 700, 0, -10000, -10000, 10000, 10000, 0.01f, 0.01f);
-		CreateFloatInput(																		"Lifetime", 					BulletPattern.GetPatternData().SetLifeTime, 1.0f, 0.01f, 20f, 0.01f);
-		CreateVector2Input(																	"Scale", 							BulletPattern.GetPatternData().SetScale, 2, 2, 0.05f, 0.05f, 10, 10, 0.01f, 0.01f);
-		CreateColorInput(																		"Color", 							BulletPattern.GetPatternData().SetColor, new Color(1, 1, 1, 1));
-		CreateFloatInput(																		"Torque", 						BulletPattern.GetPatternData().SetTorque, 0, -360f, 360f, 0.01f);
-		EnumInput DistributionInput = CreateEnumInput(			"Distribution", 			BulletPattern.GetPatternData().SetBulletDistribution, typeof(BulletDistributionTypes));
-		CreateFloatInput(																		"Seperation", 				BulletPattern.GetPatternData().SetCustomBulletDistributionDistance, 45, -360, 360, 0.01f, new Condition(DistributionInput, 1));
+		CreateVector2Input(																	"Start Velocity", 		patternData.GetStartVelocity, patternData.SetStartVelocity, 700, 0, -10000, -10000, 10000, 10000, 0.01f, 0.01f);
+		CreateFloatInput(																		"Lifetime", 					patternData.GetLifeTime, patternData.SetLifeTime, 1.0f, 0.01f, 10f, 0.01f);
+		CreateVector2Input(																	"Scale", 							patternData.GetScale, patternData.SetScale, 2, 2, 0.05f, 0.05f, 10, 10, 0.01f, 0.01f);
+		CreateColorInput(																		"Color", 							patternData.GetColor, patternData.SetColor, new Color(1, 1, 1, 1));
+		CreateFloatInput(																		"Torque", 						patternData.GetTorque, patternData.SetTorque, 0, -360f, 360f, 0.01f);
+		EnumInput DistributionInput = CreateEnumInput(			"Distribution", 			patternData.GetBulletDistribution, patternData.SetBulletDistribution, typeof(BulletDistributionTypes));
+		CreateFloatInput(																		"Seperation", 				patternData.GetCustomBulletDistributionDistance, patternData.SetCustomBulletDistributionDistance, 45, -360, 360, 0.01f, new Condition(DistributionInput, 1));
 
 		// Show first tab by default
 		MainTabContainer.CurrentTab = 0;
 
-		UpdatePatternData();
+		UpdateDataValue();
 	}
 
 	private void MoveOrigin()
@@ -84,16 +141,16 @@ public partial class Main : Node
 	}
 
 	// the event subscription used in ConnectSignals expect vars to be given and won't work otherwhise, but we don't care about those
-	private void UpdatePatternDataRedirect(double pFakeInput){UpdatePatternData();}
-	private void UpdatePatternDataRedirect(long pFakeInput){UpdatePatternData();}
-	private void UpdatePatternDataRedirect(bool pFakeInput){UpdatePatternData();}
-	private void UpdatePatternDataRedirect(Color pFakeInput){UpdatePatternData();}
+	private void UpdateDataValueRedirect(double pFakeInput){UpdateDataValue();}
+	private void UpdateDataValueRedirect(long pFakeInput){UpdateDataValue();}
+	private void UpdateDataValueRedirect(bool pFakeInput){UpdateDataValue();}
+	private void UpdateDataValueRedirect(Color pFakeInput){UpdateDataValue();}
 
-	private void CreateIntInput (string pDisplayName, Action<int> pLinkedSetter, int pDefaultValue, int pMinValue, int pMaxValue, int pStepSize, ConditionI pCondition = null)
+	private void CreateIntInput (string pDisplayName, Func<int> pLinkedGetter, Action<int> pLinkedSetter, int pDefaultValue, int pMinValue, int pMaxValue, int pStepSize, ConditionI pCondition = null)
 	{
 		IntInput InputObj = (IntInput)IntInputScene.Instantiate();
-		InputObj.SetData(pLinkedSetter, pDefaultValue, pMinValue, pMaxValue, pStepSize);
-		InputObj.GetInputItem().ValueChanged += UpdatePatternDataRedirect;
+		InputObj.SetData(pLinkedGetter, pLinkedSetter, pDefaultValue, pMinValue, pMaxValue, pStepSize);
+		InputObj.GetInputItem().ValueChanged += UpdateDataValueRedirect;
 		InputItems.Add(InputObj);
 		InputContainers[MainTabContainer.CurrentTab].AddChild(InputObj);
 
@@ -105,11 +162,11 @@ public partial class Main : Node
 		}
 	}
 
-	private void CreateFloatInput (string pDisplayName, Action<float> pLinkedSetter, float pDefaultValue, float pMinValue, float pMaxValue, float pStepSize, ConditionI pCondition = null)
+	private void CreateFloatInput (string pDisplayName, Func<float> pLinkedGetter, Action<float> pLinkedSetter, float pDefaultValue, float pMinValue, float pMaxValue, float pStepSize, ConditionI pCondition = null)
 	{
 		FloatInput InputObj = (FloatInput)FloatInputScene.Instantiate();
-		InputObj.SetData(pLinkedSetter, pDefaultValue, pMinValue, pMaxValue, pStepSize);
-		InputObj.GetInputItem().ValueChanged += UpdatePatternDataRedirect;
+		InputObj.SetData(pLinkedGetter, pLinkedSetter, pDefaultValue, pMinValue, pMaxValue, pStepSize);
+		InputObj.GetInputItem().ValueChanged += UpdateDataValueRedirect;
 		InputItems.Add(InputObj);
 		InputContainers[MainTabContainer.CurrentTab].AddChild(InputObj);
 
@@ -121,11 +178,11 @@ public partial class Main : Node
 		}
 	}
 
-	private void CreateBoolInput (string pDisplayName, Action<bool> pLinkedSetter, bool pDefaultValue, ConditionI pCondition = null)
+	private void CreateBoolInput (string pDisplayName, Func<bool> pLinkedGetter, Action<bool> pLinkedSetter, bool pDefaultValue, ConditionI pCondition = null)
 	{
 		BoolInput InputObj = (BoolInput)BoolInputScene.Instantiate();
-		InputObj.SetData(pLinkedSetter, pDefaultValue);
-		InputObj.GetInputItem().Toggled += UpdatePatternDataRedirect;
+		InputObj.SetData(pLinkedGetter, pLinkedSetter, pDefaultValue);
+		InputObj.GetInputItem().Toggled += UpdateDataValueRedirect;
 		InputItems.Add(InputObj);
 		InputContainers[MainTabContainer.CurrentTab].AddChild(InputObj);
 
@@ -137,12 +194,12 @@ public partial class Main : Node
 		}
 	}
 
-	private void CreateVector2Input (string pDisplayName, Action<float, float> pLinkedSetter, float pDefaultValueX, float pDefaultValueY, float pMinValueX, float pMinValueY, float pMaxValueX, float pMaxValueY, float pStepSizeX, float pStepSizeY, ConditionI pCondition = null)
+	private void CreateVector2Input (string pDisplayName, Func<Vector2> pLinkedGetter, Action<float, float> pLinkedSetter, float pDefaultValueX, float pDefaultValueY, float pMinValueX, float pMinValueY, float pMaxValueX, float pMaxValueY, float pStepSizeX, float pStepSizeY, ConditionI pCondition = null)
 	{
 		Vector2Input InputObj = (Vector2Input)Vector2InputScene.Instantiate();
-		InputObj.SetData(pLinkedSetter, pDefaultValueX, pDefaultValueY, pMinValueX, pMinValueY, pMaxValueX, pMaxValueY, pStepSizeX, pStepSizeY);
-		InputObj.GetInputItemX().ValueChanged += UpdatePatternDataRedirect;
-		InputObj.GetInputItemY().ValueChanged += UpdatePatternDataRedirect;
+		InputObj.SetData(pLinkedGetter, pLinkedSetter, pDefaultValueX, pDefaultValueY, pMinValueX, pMinValueY, pMaxValueX, pMaxValueY, pStepSizeX, pStepSizeY);
+		InputObj.GetInputItemX().ValueChanged += UpdateDataValueRedirect;
+		InputObj.GetInputItemY().ValueChanged += UpdateDataValueRedirect;
 		InputItems.Add(InputObj);
 		InputContainers[MainTabContainer.CurrentTab].AddChild(InputObj);
 
@@ -154,11 +211,11 @@ public partial class Main : Node
 		}
 	}
 
-	private void CreateColorInput (string pDisplayName, Action<Color> pLinkedSetter, Color pDefaultValue, ConditionI pCondition = null)
+	private void CreateColorInput (string pDisplayName, Func<Color> pLinkedGetter, Action<Color> pLinkedSetter, Color pDefaultValue, ConditionI pCondition = null)
 	{
 		ColorInput InputObj = (ColorInput)ColorInputScene.Instantiate();
-		InputObj.SetData(pLinkedSetter, pDefaultValue);
-		InputObj.GetInputItem().ColorChanged += UpdatePatternDataRedirect;
+		InputObj.SetData(pLinkedGetter, pLinkedSetter, pDefaultValue);
+		InputObj.GetInputItem().ColorChanged += UpdateDataValueRedirect;
 		InputItems.Add(InputObj);
 		InputContainers[MainTabContainer.CurrentTab].AddChild(InputObj);
 
@@ -170,11 +227,11 @@ public partial class Main : Node
 		}
 	}
 
-	private EnumInput CreateEnumInput (string pDisplayName, Action<int> pLinkedSetter, Type pEnum, ConditionI pCondition = null)
+	private EnumInput CreateEnumInput (string pDisplayName, Func<int> pLinkedGetter, Action<int> pLinkedSetter, Type pEnum, ConditionI pCondition = null)
 	{
 		EnumInput InputObj = (EnumInput)EnumInputScene.Instantiate();
-		InputObj.SetData(pLinkedSetter, pEnum);
-		InputObj.GetInputItem().ItemSelected += UpdatePatternDataRedirect;
+		InputObj.SetData(pLinkedGetter, pLinkedSetter, pEnum);
+		InputObj.GetInputItem().ItemSelected += UpdateDataValueRedirect;
 		InputItems.Add(InputObj);
 		InputContainers[MainTabContainer.CurrentTab].AddChild(InputObj);
 

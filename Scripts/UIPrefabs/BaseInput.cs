@@ -6,7 +6,8 @@ public abstract partial class BaseInput : Control
 	private GenericText LinkedTextObject;
 	private ConditionI VisiblityCondition;
 
-	public abstract void UpdateValue();
+	public abstract void UpdateDataValue();
+	public abstract void UpdateInputValue();
 
 	public void SetLinkedTextObject(GenericText pTextObj) {LinkedTextObject = pTextObj;}
 
